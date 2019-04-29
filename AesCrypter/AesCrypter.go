@@ -23,8 +23,42 @@ func PKCS7Padding(origData []byte, blockSize int) []byte {
 	return append(origData, padText...)
 }
 
-//AES128 CBC解密
-func AESCBCDecrypt(crpyped string, key []byte) []byte {
+//AES128 CBC加密(hex)
+func AESCbcEncrypt(origData []byte, key []byte) string{
+	block,_:=aes.NewCipher(key)
+	origData=PKCS7Padding(origData, block.BlockSize())
+	blockMode:=cipher.NewCBCEncrypter(block,key[:block.BlockSize()])
+	cryptData:=make([]byte,len(origData))
+	blockMode.CryptBlocks(cryptData,origData)
+	encodeString:=hex.EncodeToString(cryptData)
+	return encodeString
+}
+
+//AES128 CBC解密(hex)
+func AESCbcDecrypt(cryptData string, key []byte) []byte{
+	decodeData, _ := hex.DecodeString(cryptData) //解码BASE64
+	block, _ := aes.NewCipher(key)
+	blockSize := block.BlockSize()
+	blockMode := cipher.NewCBCDecrypter(block, key[:blockSize])
+	origData := make([]byte, len(decodeData))
+	blockMode.CryptBlocks(origData, decodeData)
+	origData = PKCS7UnPadding(origData)
+	return origData
+}
+
+//AES128 CBC加密(base64)
+func AESCbcEncryptV2(origData []byte, key []byte) string {
+	block, _ := aes.NewCipher(key)
+	origData = PKCS7Padding(origData, block.BlockSize())
+	blockMode := cipher.NewCBCEncrypter(block, key[:block.BlockSize()])
+	cryptData := make([]byte, len(origData))
+	blockMode.CryptBlocks(cryptData, origData)
+	encodeString := base64.StdEncoding.EncodeToString(cryptData)
+	return encodeString
+}
+
+//AES128 CBC解密(base64)
+func AESCbcDecryptV2(crpyped string, key []byte) []byte {
 	decodeData, _ := base64.StdEncoding.DecodeString(crpyped) //解码BASE64
 	block, _ := aes.NewCipher(key)
 	blockSize := block.BlockSize()
@@ -35,18 +69,7 @@ func AESCBCDecrypt(crpyped string, key []byte) []byte {
 	return origData
 }
 
-//AES128 CBC加密
-func AESCBCEncrypt(origData []byte, key []byte) string {
-	block, _ := aes.NewCipher(key)
-	origData = PKCS7Padding(origData, block.BlockSize())
-	blockMode := cipher.NewCBCEncrypter(block, key[:block.BlockSize()])
-	cryped := make([]byte, len(origData))
-	blockMode.CryptBlocks(cryped, origData)
-	encodeString := base64.StdEncoding.EncodeToString(cryped)
-	return encodeString
-}
-
-//AES128 CTR加密
+//AES128 CTR加密(hex)
 func AESCtrEncrypt(data []byte, key []byte) string {
 	block, _ := aes.NewCipher(key)
 	iv := []byte(BaseString.GetRandomString(16)) //获取16个字节长度的随机IV
@@ -58,7 +81,7 @@ func AESCtrEncrypt(data []byte, key []byte) string {
 	return result
 }
 
-//AES128 CTR解密
+//AES128 CTR解密(hex)
 func AESCtrDecrypt(data string, key []byte) []byte {
 	bData := []byte(data)
 	iv := bData[0:16] //取出随机生成的IV
