@@ -23,6 +23,29 @@ func PKCS7Padding(origData []byte, blockSize int) []byte {
 	return append(origData, padText...)
 }
 
+//去掉padding(nopadding方式)
+func UnPadding(origData []byte) []byte {
+	length := len(origData)
+	paddingChar := int(origData[length-1])
+	paddingCount := 0
+	for {
+		if paddingChar != 0 {
+			break
+		} else {
+			paddingCount++
+			paddingChar = int(origData[length-(paddingCount+1)])
+		}
+	}
+	return origData[:length-paddingCount]
+}
+
+//添加padding(nopadding方式)
+func Padding(origData []byte, blockSize int) []byte {
+	padding := blockSize - len(origData)%blockSize
+	padText := bytes.Repeat([]byte{byte(0)}, padding)
+	return append(origData, padText...)
+}
+
 //AES128 CBC加密(hex)
 func AESCbcEncrypt(origData []byte, key []byte) string{
 	block,_:=aes.NewCipher(key)
