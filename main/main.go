@@ -1,8 +1,8 @@
 package main
 
 import (
+	"../AesCrypter"
 	"fmt"
-	"gobase/AesCrypter"
 )
 
 func main() {
@@ -13,10 +13,10 @@ func main() {
 	//result2:=BaseString.GetRandStringEx(16,str)
 	//fmt.Println(result2)
 
-	str := "this is a test"
+	str := "this is a test";
 	key := "1234567890123456"
-	result := AesCrypter.AESCbcEncrypt([]byte(str), []byte(key))
+	result := AesCrypter.AESCtrEncryptV2([]byte(str), []byte(key))
 	fmt.Println(result)
-	result2:=AesCrypter.AESCbcDecrypt(result, []byte(key))
+	result2:=AesCrypter.AESCtrDecryptV2(result, []byte(key))
 	fmt.Println(string(result2))
 }
