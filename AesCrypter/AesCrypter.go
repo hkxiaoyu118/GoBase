@@ -1,12 +1,12 @@
 package AesCrypter
 
 import (
-	"../BaseString"
 	"bytes"
 	"crypto/aes"
 	"crypto/cipher"
 	"encoding/base64"
 	"encoding/hex"
+	"github.com/hkxiaoyu/gobase/BaseString"
 )
 
 //去掉padding

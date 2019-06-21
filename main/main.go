@@ -1,8 +1,8 @@
 package main
 
 import (
-	"../AesCrypter"
 	"fmt"
+	"github.com/hkxiaoyu/gobase/AesCrypter"
 )
 
 func main() {
