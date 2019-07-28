@@ -13,7 +13,7 @@ func main() {
 	//result2:=BaseString.GetRandStringEx(16,str)
 	//fmt.Println(result2)
 
-	str := "this is a test";
+	str := "this is a test"
 	key := "1234567890123456"
 	result := AesCrypter.AESCtrEncryptV2([]byte(str), []byte(key))
 	fmt.Println(result)
