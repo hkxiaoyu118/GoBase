@@ -9,21 +9,21 @@ import (
 	"github.com/hkxiaoyu/gobase/BaseString"
 )
 
-//去掉padding
+// 去掉padding
 func PKCS7UnPadding(origData []byte) []byte {
 	length := len(origData)
 	unpadding := int(origData[length-1])
 	return origData[:length-unpadding]
 }
 
-//添加padding
+// 添加padding
 func PKCS7Padding(origData []byte, blockSize int) []byte {
 	padding := blockSize - len(origData)%blockSize
 	padText := bytes.Repeat([]byte{byte(padding)}, padding)
 	return append(origData, padText...)
 }
 
-//去掉padding(nopadding方式)
+// 去掉padding(nopadding方式)
 func UnPadding(origData []byte) []byte {
 	length := len(origData)
 	paddingChar := int(origData[length-1])
@@ -39,14 +39,14 @@ func UnPadding(origData []byte) []byte {
 	return origData[:length-paddingCount]
 }
 
-//添加padding(nopadding方式)
+// 添加padding(nopadding方式)
 func Padding(origData []byte, blockSize int) []byte {
 	padding := blockSize - len(origData)%blockSize
 	padText := bytes.Repeat([]byte{byte(0)}, padding)
 	return append(origData, padText...)
 }
 
-//AES128 CBC加密(hex)
+// AES128 CBC加密(hex)
 func AESCbcEncrypt(origData []byte, key []byte) string{
 	block,_:=aes.NewCipher(key)
 	origData=PKCS7Padding(origData, block.BlockSize())
@@ -57,7 +57,7 @@ func AESCbcEncrypt(origData []byte, key []byte) string{
 	return encodeString
 }
 
-//AES128 CBC解密(hex)
+// AES128 CBC解密(hex)
 func AESCbcDecrypt(cryptData string, key []byte) []byte{
 	decodeData, _ := hex.DecodeString(cryptData) //解码BASE64
 	block, _ := aes.NewCipher(key)
@@ -69,7 +69,7 @@ func AESCbcDecrypt(cryptData string, key []byte) []byte{
 	return origData
 }
 
-//AES128 CBC加密(base64)
+// AES128 CBC加密(base64)
 func AESCbcEncryptV2(origData []byte, key []byte) string {
 	block, _ := aes.NewCipher(key)
 	origData = PKCS7Padding(origData, block.BlockSize())
@@ -80,7 +80,7 @@ func AESCbcEncryptV2(origData []byte, key []byte) string {
 	return encodeString
 }
 
-//AES128 CBC解密(base64)
+// AES128 CBC解密(base64)
 func AESCbcDecryptV2(crpyped string, key []byte) []byte {
 	decodeData, _ := base64.StdEncoding.DecodeString(crpyped) //解码BASE64
 	block, _ := aes.NewCipher(key)
@@ -92,7 +92,7 @@ func AESCbcDecryptV2(crpyped string, key []byte) []byte {
 	return origData
 }
 
-//AES128 CTR加密(hex)
+// AES128 CTR加密(hex)
 func AESCtrEncrypt(data []byte, key []byte) string {
 	block, _ := aes.NewCipher(key)
 	iv := []byte(BaseString.GetRandomString(16)) //获取16个字节长度的随机IV
@@ -104,7 +104,7 @@ func AESCtrEncrypt(data []byte, key []byte) string {
 	return result
 }
 
-//AES128 CTR解密(hex)
+// AES128 CTR解密(hex)
 func AESCtrDecrypt(data string, key []byte) []byte {
 	bData := []byte(data)
 	iv := bData[0:16] //取出随机生成的IV
@@ -117,7 +117,7 @@ func AESCtrDecrypt(data string, key []byte) []byte {
 	return message
 }
 
-//AES128 CTR加密(base64)
+// AES128 CTR加密(base64)
 func AESCtrEncryptV2(data []byte, key []byte) string {
 	block, _ := aes.NewCipher(key)
 	iv := []byte(BaseString.GetRandomString(16)) //获取16个字节长度的随机IV
@@ -129,7 +129,7 @@ func AESCtrEncryptV2(data []byte, key []byte) string {
 	return result
 }
 
-//AES128 CTR解密(base64)
+// AES128 CTR解密(base64)
 func AESCtrDecryptV2(data string, key []byte) []byte {
 	bData := []byte(data)
 	iv := bData[0:16] //取出随机生成的IV
