@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-func GetRandomString(length int) string {
+func StrGetRandomString(length int) string {
 	str := "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 	bytes := []byte(str)
 	result := []byte{}
@@ -16,7 +16,7 @@ func GetRandomString(length int) string {
 	return string(result)
 }
 
-func GetRandStringEx(length int, str string) string {
+func StrGetRandStringEx(length int, str string) string {
 	bytes := []byte(str)
 	result := []byte{}
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))
