@@ -95,7 +95,7 @@ func AESCbcDecryptV2(crpyped string, key []byte) []byte {
 // AES128 CTR加密(hex)
 func AESCtrEncrypt(data []byte, key []byte) string {
 	block, _ := aes.NewCipher(key)
-	iv := []byte(BaseString.GetRandomString(16)) //获取16个字节长度的随机IV
+	iv := []byte(BaseString.StrGetRandomString(16)) //获取16个字节长度的随机IV
 	blockMode := cipher.NewCTR(block, iv)
 	message := make([]byte, len(data))
 	blockMode.XORKeyStream(message, data)
@@ -120,7 +120,7 @@ func AESCtrDecrypt(data string, key []byte) []byte {
 // AES128 CTR加密(base64)
 func AESCtrEncryptV2(data []byte, key []byte) string {
 	block, _ := aes.NewCipher(key)
-	iv := []byte(BaseString.GetRandomString(16)) //获取16个字节长度的随机IV
+	iv := []byte(BaseString.StrGetRandomString(16)) //获取16个字节长度的随机IV
 	blockMode := cipher.NewCTR(block, iv)
 	message := make([]byte, len(data))
 	blockMode.XORKeyStream(message, data)
