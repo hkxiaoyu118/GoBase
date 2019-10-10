@@ -25,3 +25,17 @@ func StrGetRandStringEx(length int, str string) string {
 	}
 	return string(result)
 }
+
+func StrSubString(str string, start, end int) string {
+	rs := []rune(str)
+	length := len(rs)
+
+	if start < 0 || start > length {
+		panic("start is wrong")
+	}
+
+	if end < start || end > length {
+		panic("end is wrong")
+	}
+	return string(rs[start:end])
+}
