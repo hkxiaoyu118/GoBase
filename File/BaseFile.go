@@ -140,7 +140,7 @@ func UnZip(zipFile string, dest string) error {
 		}()
 
 		filename := dest + "/" + file.Name
-		err = os.MkdirAll(getDir(filename), 0755)
+		err = os.MkdirAll(FsGetDir(filename), 0755)
 		if err != nil {
 			return err
 		}
