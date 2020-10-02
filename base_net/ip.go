@@ -1,4 +1,4 @@
-package netbase
+package base_net
 
 import (
 	"net"

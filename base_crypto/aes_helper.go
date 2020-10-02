@@ -1,4 +1,4 @@
-package AesCrypter
+package base_crypto
 
 import (
 	"bytes"
@@ -6,7 +6,7 @@ import (
 	"crypto/cipher"
 	"encoding/base64"
 	"encoding/hex"
-	"github.com/hkxiaoyu/gobase/BaseString"
+	"github.com/hkxiaoyu/gobase/base_string"
 )
 
 // 去掉padding
@@ -92,52 +92,29 @@ func AESCbcDecryptV2(crpyped string, key []byte) []byte {
 	return origData
 }
 
-// AES128 CTR加密(hex)
+//AES128 CTR加密(hex)
 func AESCtrEncrypt(data []byte, key []byte) string {
 	block, _ := aes.NewCipher(key)
-	iv := []byte(BaseString.StrGetRandomString(16)) //获取16个字节长度的随机IV
+	iv := []byte(base_string.StrGetRandomString(16)) //获取16个字节长度的随机IV
 	blockMode := cipher.NewCTR(block, iv)
 	message := make([]byte, len(data))
 	blockMode.XORKeyStream(message, data)
-	hexMessage := hex.EncodeToString(message)
-	result := string(iv) + hexMessage //将随机的IV放到结果的头部
-	return result
+	fullMessage := append(iv, message...)
+	hexMessage := hex.EncodeToString(fullMessage)
+	return hexMessage
 }
 
-// AES128 CTR解密(hex)
+//AES128 CTR解密(hex)
 func AESCtrDecrypt(data string, key []byte) []byte {
-	bData := []byte(data)
-	iv := bData[0:16] //取出随机生成的IV
-	hexCryptData := bData[16:len(bData)]
-	cryptData, _ := hex.DecodeString(string(hexCryptData)) //将加密内容从hex字符串转化为二进制
-	block, _ := aes.NewCipher(key)
-	blockMode := cipher.NewCTR(block, iv) //使用取出的随机IV
-	message := make([]byte, len(cryptData))
-	blockMode.XORKeyStream(message, cryptData) //解密真正的内容
-	return message
-}
-
-// AES128 CTR加密(base64)
-func AESCtrEncryptV2(data []byte, key []byte) string {
-	block, _ := aes.NewCipher(key)
-	iv := []byte(BaseString.StrGetRandomString(16)) //获取16个字节长度的随机IV
-	blockMode := cipher.NewCTR(block, iv)
-	message := make([]byte, len(data))
-	blockMode.XORKeyStream(message, data)
-	base64Message := base64.StdEncoding.EncodeToString(message) //将加密后的信息转化为BASE64,BASE64比HEX能够节约更多的内存空间
-	result := string(iv) + base64Message //将随机的IV放到结果的头部
-	return result
-}
-
-// AES128 CTR解密(base64)
-func AESCtrDecryptV2(data string, key []byte) []byte {
-	bData := []byte(data)
-	iv := bData[0:16] //取出随机生成的IV
-	base64CryptData := bData[16:len(bData)]
-	cryptData, _ := base64.StdEncoding.DecodeString(string(base64CryptData)) //将加密的内容从base64格式转化为二进制
-	block, _ := aes.NewCipher(key)
-	blockMode := cipher.NewCTR(block, iv) //使用取出的随机IV
-	message := make([]byte, len(cryptData))
-	blockMode.XORKeyStream(message, cryptData) //解密真正的内容
-	return message
+	bData, err := hex.DecodeString(data)
+	if err == nil {
+		iv := bData[0:16]                 //取出随机生成的IV
+		cryptData := bData[16:len(bData)] //取出加密后的数据
+		block, _ := aes.NewCipher(key)
+		blockMode := cipher.NewCTR(block, iv) //使用取出的随机IV
+		message := make([]byte, len(cryptData))
+		blockMode.XORKeyStream(message, cryptData) //解密真正的内容
+		return message
+	}
+	return []byte("")
 }

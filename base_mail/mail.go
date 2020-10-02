@@ -1,4 +1,4 @@
-package BaseMail
+package base_mail
 
 import (
 	"net/smtp"

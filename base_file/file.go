@@ -1,10 +1,10 @@
-package File
+package base_file
 
 import (
 	"archive/zip"
 	"bytes"
 	"errors"
-	"github.com/hkxiaoyu/gobase/BaseString"
+	"github.com/hkxiaoyu/gobase/base_string"
 	"io"
 	"io/ioutil"
 	"os"
@@ -100,7 +100,7 @@ func FsCloseFile(file *os.File) {
 
 // 获取文件所在的文件目录
 func FsGetDir(filePath string) string {
-	return BaseString.StrSubString(filePath, 0, strings.LastIndex(filePath, "/"))
+	return base_string.StrSubString(filePath, 0, strings.LastIndex(filePath, "/"))
 }
 
 // 判断文件是否是zip压缩包

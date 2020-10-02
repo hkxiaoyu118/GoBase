@@ -1,4 +1,4 @@
-package BaseString
+package base_string
 
 import (
 	"math/rand"
